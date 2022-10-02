@@ -1,0 +1,96 @@
+* Problem
+SQL Schema
+Table: Employee
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key column for this table.
+Each row of this table contains information about the salary of an employee.
+ 
+
+Write an SQL query to report the second highest salary from the Employee table. If there is no second highest salary, the query should report null.
+
+The query result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
+| 2  | 200    |
+| 3  | 300    |
++----+--------+
+Output: 
++---------------------+
+| SecondHighestSalary |
++---------------------+
+| 200                 |
++---------------------+
+Example 2:
+
+Input: \\
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
++----+--------+
+Output: 
++---------------------+
+| SecondHighestSalary |
++---------------------+
+| null                |
++---------------------+
+
+* Solution
+
+#+begin_src sql
+with salary_cnt as (
+ select 
+  count(distinct e.salary) as emp_count
+ from 
+   Employee e
+)
+,top_two as (select
+ case when (select top 1 emp_count from salary_cnt) = 1 then -1 else max(e.salary) end as salary
+from 
+ Employee e
+union 
+select distinct top 2
+ e.salary 
+from 
+ Employee e
+order by 
+ e.salary desc
+)
+select 
+ case when min(tt.salary) = -1 then null else min(tt.salary) end as SecondHighestSalary
+from 
+ top_two tt
+#+end_src
+
+Success
+Details 
+Runtime: 700 ms, faster than 59.00% of MS SQL Server online submissions for Second Highest Salary.
+Memory Usage: 0B, less than 100.00% of MS SQL Server online submissions for Second Highest Salary.
+
+
+MYSQL Solution
+#+begin_src sql
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary
+#+end_src

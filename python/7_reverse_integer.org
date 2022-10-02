@@ -1,0 +1,91 @@
+#+TITLE:       7. Reverse Integer
+#+AUTHOR:      Richard Wilson
+#+DATE:        8/28/22
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+* Problem
+* Solution
+
+#+begin_src python :results output
+class Solution:
+    def reverse(self,x):
+        #define empty list
+        reversed_list = []
+        #convert to list
+        char_list = [i for i in str(x)]
+        
+        #check if negative
+        neg_ind = False
+        if char_list[0] == '-':
+            neg_ind = True
+            char_list.pop(0)
+        
+        #reverse chars
+        while(char_list != []):
+            element = char_list.pop(0)
+            reversed_list.insert(0,element)
+        
+        #add "-" if negative
+        if neg_ind:
+            reversed_list.insert(0,"-")
+        
+        #convert back to int
+        reversed = int("".join(reversed_list))
+        if reversed < 2**31 and reversed > -2**31 :
+            return reversed
+        else:
+            return 0
+
+test = Solution()
+print(test.reverse(123))
+#+end_src
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: ['3', '2', '1']
+: 321
+
+Success
+Details 
+Runtime: 53 ms, faster than 47.46% of Python3 online submissions for Reverse Integer.
+Memory Usage: 14 MB, less than 16.46% of Python3 online submissions for Reverse Integer.
+
+
+Math only solution
+
+#+begin_src python :results output
+class Solution:
+    def reverse(self,x):
+        rev = 0
+        neg_ind = False
+        if x < 0:
+            neg_ind = True
+        x = abs(x)
+        while(x != 0):
+            pop = x % 10
+            x //= 10
+            rev = rev * 10 + pop
+        if neg_ind:
+            rev *= -1
+        if rev > 2**31 or rev < -2**31:
+            return 0
+        return rev
+test = Solution()
+print(test.reverse(123))
+#+end_src
+
+#+RESULTS:
+: 3
+: 12
+: 2
+: 1
+: 1
+: 0
+: 321
+
+Runtime: 56 ms, faster than 39.10% of Python3 online submissions for Reverse Integer.
+Memory Usage: 14.2 MB, less than 16.46% of Python3 online submissions for Reverse Integer.

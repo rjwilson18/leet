@@ -1,0 +1,60 @@
+#+TITLE:       1. Two Sum
+#+AUTHOR:      Richard Wilson
+#+DATE:        08/30/22
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+* Problem
+Difficulty: Easy
+
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+Example 2:
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+Example 3:
+
+Input: nums = [3,3], target = 6
+Output: [0,1]
+ 
+
+Constraints:
+
+2 <= nums.length <= 104
+-109 <= nums[i] <= 109
+-109 <= target <= 109
+Only one valid answer exists.
+ 
+
+Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+
+* Solution
+This solution has O(n) complexity opposed to the nested loop option which would be O(n^2)
+
+#+begin_src python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(0,len(nums) - 1):
+            seek = target - nums[i]
+            if seek in nums[i+1:]:
+                j = nums[i+1:].index(seek) + i+1
+                return [i,j]
+#+end_src
+
+Success
+Details 
+Runtime: 1078 ms, faster than 32.85% of Python3 online submissions for Two Sum.
+Memory Usage: 15 MB, less than 76.37% of Python3 online submissions for Two Sum.

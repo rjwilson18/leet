@@ -1,0 +1,34 @@
+* Problem
+
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
++----+--------+
+n = 2
+Output: 
++------------------------+
+| getNthHighestSalary(2) |
++------------------------+
+| null                   |
++------------------------+
+
+* Solutions
+This doesn't work in their editor, but it is the right concept.
+
+#+begin_src sql
+CREATE FUNCTION getNthHighestSalary(@N INT) RETURNS INT AS
+BEGIN
+    DECLARE @n;
+    SET @n= @N - 1;
+    RETURN (
+      IFNULL(
+       (SELECT DISTINCT salary
+        FROM Employee
+        ORDER BY salary DESC
+        LIMIT 1 OFFSET @n),
+      NULL)
+    );
+END;
+#+end_src

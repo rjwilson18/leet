@@ -1,0 +1,107 @@
+#+TITLE:       11. Container with the Most Water
+#+AUTHOR:      Richard Wilson
+#+DATE:        8/28/22
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+
+* Problem
+Difficulty: Medium
+
+https://leetcode.com/problems/container-with-most-water/
+
+You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.
+
+Notice that you may not slant the container.
+
+ 
+
+Example 1:
+
+
+Input: height = [1,8,6,2,5,4,8,3,7]
+Output: 49
+Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+Example 2:
+
+Input: height = [1,1]
+Output: 1
+ 
+
+Constraints:
+
+n == height.length
+2 <= n <= 105
+0 <= height[i] <= 104
+
+* Solution
+** Works but too slow for large input
+#+begin_src python :results output
+def maxArea(height):
+    largest_area = 0
+    for i in range(1,len(height)):
+        print('i= {}'.format(i))
+        for j in range(0,i):
+            shorter_line = min(height[i],height[j])
+            distance = i-j
+            area = shorter_line * distance
+            largest_area = max(largest_area, area)
+            print('j= {}'.format(j))
+    return largest_area
+            
+print(maxArea([1,8]))
+#+end_src
+
+#+RESULTS:
+: i= 1
+: j= 0
+: 1
+
+
+#+begin_src python results: output
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        start = 0
+        end = len(height) - 1
+        largest_area = 0
+        while(1):
+            tall = min(height[start],height[end])
+            dist = end - start
+            area =  tall * dist
+            if area > largest_area:
+                largest_area = area
+            start0 = start
+            end0 = end
+            # increment short end and check again
+            if min(height[start],height[end]) == height[start]:
+                for i in range(start+1,end):
+                    if i == end:
+                        return largest_area
+                    elif height[i] > height[start]:
+                        start = i
+                        break
+            else:
+                for i in range(end - 1,start, -1):
+                    if i == start:
+                        return largest_area
+                    if height[i] > height[end]:
+                        end = i
+                        break
+            if start0 == start and end0 == end:
+                return largest_area
+test = Solution()
+print(test.maxArea([1,8]))
+#+end_src
+
+#+RESULTS:
+
+
+Success
+Details 
+Runtime: 857 ms, faster than 80.41% of Python3 online submissions for Container With Most Water.
+Memory Usage: 27.6 MB, less than 13.13% of Python3 online submissions for Container With Most Water.
