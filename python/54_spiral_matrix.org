@@ -1,0 +1,80 @@
+#+TITLE:       54 Spiral Matrix
+#+AUTHOR:      Richard Wilson
+#+DATE:        10/07/2022
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+* Problem
+Difficulty = Medium
+
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]] \\
+Output: [1,2,3,6,9,8,7,4,5] 
+
+Example 2:
+
+Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] \\
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+ 
+
+Constraints:
+
+: m == matrix.length 
+: n == matrix[i].length
+: 1 <= m, n <= 10
+: -100 <= matrix[i][j] <= 100
+
+* Solution
+The trick to this is to iterate in a 4 step process, checking before each step to ensure the matrix isn't empty.
+
+1. Go across the top (add first matrix element to return list) \\
+2. Go down the back  (add the last element in each matrix element to the return list \\
+3. Go backwards across the bottom (add the reversed last element to the matrix return list) \\
+4. Go up the front (add the first element in each matrix element to the return list)
+
+#+begin_src python
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        spiral_order = []
+        
+        def check_empty():
+            if matrix == [] or len(matrix[0]) == 0:
+                return True
+            return False
+            
+        while(1):
+            #go across
+            if check_empty():
+                break
+            l1 = matrix.pop(0)
+            spiral_order += l1
+            #go down 
+            if check_empty():
+                break
+            for i in range(0,len(matrix)):
+                l = matrix[i]
+                last_element = l.pop(-1)
+                spiral_order.append(last_element)
+            #go backwards
+            if check_empty():
+                break
+            l1 = matrix.pop(-1)
+            spiral_order += reversed(l1)
+            #go up
+            if check_empty():
+                break
+            for i in range(len(matrix),0,-1):
+                l = matrix[i-1]
+                first_element = l.pop(0)
+                spiral_order.append(first_element)
+        return spiral_order
+#+end_src
+
+Success
+Details 
+Runtime: 34 ms, faster than 90.40% of Python3 online submissions for Spiral Matrix.
+Memory Usage: 13.8 MB, less than 82.93% of Python3 online submissions for Spiral Matrix.
