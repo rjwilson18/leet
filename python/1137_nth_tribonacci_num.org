@@ -1,0 +1,57 @@
+#+TITLE:       Nth Tribonacci Number
+#+AUTHOR:      Richard Wilson
+#+DATE:        10/09/22
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+* Problem
+Difficulty: Easy https://leetcode.com/problems/n-th-tribonacci-number/
+
+The Tribonacci sequence Tn is defined as follows: 
+
+T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+
+Given n, return the value of Tn.
+
+
+Example 1:
+
+Input: n = 4 \\
+Output: 4 \\
+Explanation: \\
+T_3 = 0 + 1 + 1 = 2 \\
+T_4 = 1 + 1 + 2 = 4 \\
+Example 2: \\
+
+Input: n = 25 \\
+Output: 1389537 \\
+ 
+
+Constraints:
+
+0 <= n <= 37 \\
+The answer is guaranteed to fit within a 32-bit integer, ie. answer <= 2^31 - 1.
+* Solution
+
+#+begin_src python
+class Solution:
+    def tribonacci(self, n: int) -> int:
+    
+        if n == 0:
+            return 0
+        
+        def tn(i: int, n: int, x: int, x1: int, x2: int):
+            if i >= n:
+                return x
+            else:
+                i += 1
+                return tn(i,n,x+x1+x2,x,x1)
+        
+        return tn(2,n,1,1,0)
+#+end_src
+
+Success \\
+Details \\ 
+Runtime: 37 ms, faster than 82.58% of Python3 online submissions for N-th Tribonacci Number. \\
+Memory Usage: 13.8 MB, less than 96.72% of Python3 online submissions for N-th Tribonacci Number.
