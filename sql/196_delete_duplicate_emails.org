@@ -1,0 +1,112 @@
+#+TITLE:       196 Delete Duplicate Emails
+#+AUTHOR:      Richard Wilson
+#+DATE:        10/23/2022
+
+#+OPTIONS: ^:{}
+#+OPTIONS: todo:nil
+
+* Problem
+Difficulty: Easy
+
+Table: Person
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key column for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters.
+ 
+
+Write an SQL query to delete all the duplicate emails, keeping only one unique email with the smallest id. Note that you are supposed to write a DELETE statement and not a SELECT one.
+
+After running your script, the answer shown is the Person table. The driver will first compile and run your piece of code and then show the Person table. The final order of the Person table does not matter.
+
+The query result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: \\
+Person table: 
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
+| 3  | john@example.com |
++----+------------------+
+Output: 
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
++----+------------------+
+Explanation: john@example.com is repeated two times. We keep the row with the smallest Id = 1.
+* Solution
+** Attempt 1
+Find the smallest id for an email using the min function.
+
+#+begin_src 
+with pop as
+(
+ select 
+    email,
+    min(id) as id
+ from 
+     Person
+ group by 
+  email
+)
+delete from Person p
+where 
+ p.id not in (select id from pop)
+#+end_src
+
+I submitted this twice. The first time the runtime was 1432ms, the second time was 511ms. Not sure why this variation exists.
+
+Success \\
+Details \\
+Runtime: 511 ms, faster than 98.41% of MySQL online submissions for Delete Duplicate Emails. \\
+Memory Usage: 0B, less than 100.00% of MySQL online submissions for Delete Duplicate Emails. \\
+** Attempt 2
+Replace the 'group by' with a window function
+#+begin_src sql
+with pop as
+(
+ select 
+    id
+    ,row_number() over(partition by email order by id) as rn
+ from 
+     Person
+)
+delete from Person p
+where 
+ p.id not in (select id from pop where rn = 1)
+#+end_src
+
+Success \\
+Details  \\
+Runtime: 1009 ms, faster than 65.64% of MySQL online submissions for Delete Duplicate Emails. \\
+Memory Usage: 0B, less than 100.00% of MySQL online submissions for Delete Duplicate Emails.
+
+** Attempt 3
+No CTE, use a cartesian product self-join
+#+begin_src sql
+delete p from Person p, Person p0
+where  
+ p.email = p0.email
+ and p.id > p0.id
+#+end_src
+
+This works, but I can't imagine it scales well.
+
+Success \\
+Details  \\
+Runtime: 1012 ms, faster than 65.11% of MySQL online submissions for Delete Duplicate Emails. \\
+Memory Usage: 0B, less than 100.00% of MySQL online submissions for Delete Duplicate Emails.
+
