@@ -20,6 +20,7 @@ Table: Trips
 | status      | enum     |
 | request_at  | date     |     
 +-------------+----------+
+
 id is the primary key for this table.
 The table holds all taxi trips. Each trip has a unique id, while client_id and driver_id are foreign keys to the users_id at the Users table.
 Status is an ENUM type of ('completed', 'cancelled_by_driver', 'cancelled_by_client').
@@ -34,6 +35,7 @@ Table: Users
 | banned      | enum     |
 | role        | enum     |
 +-------------+----------+
+
 users_id is the primary key for this table.
 The table holds all users. Each user has a unique users_id, and role is an ENUM type of ('client', 'driver', 'partner').
 banned is an ENUM type of ('Yes', 'No').
@@ -53,6 +55,7 @@ Example 1:
 
 Input: \\
 Trips table:
+
 +----+-----------+-----------+---------+---------------------+------------+
 | id | client_id | driver_id | city_id | status              | request_at |
 +----+-----------+-----------+---------+---------------------+------------+
@@ -67,7 +70,9 @@ Trips table:
 | 9  | 3         | 10        | 12      | completed           | 2013-10-03 |
 | 10 | 4         | 13        | 12      | cancelled_by_driver | 2013-10-03 |
 +----+-----------+-----------+---------+---------------------+------------+
+
 Users table:
+
 +----------+--------+--------+
 | users_id | banned | role   |
 +----------+--------+--------+
@@ -80,7 +85,9 @@ Users table:
 | 12       | No     | driver |
 | 13       | No     | driver |
 +----------+--------+--------+
+
 Output: 
+
 +------------+-------------------+
 | Day        | Cancellation Rate |
 +------------+-------------------+
@@ -88,6 +95,7 @@ Output:
 | 2013-10-02 | 0.00              |
 | 2013-10-03 | 0.50              |
 +------------+-------------------+
+
 Explanation: \\ 
 On 2013-10-01: \\
   - There were 4 requests in total, 2 of which were canceled. \\
